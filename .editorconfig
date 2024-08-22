@@ -1,24 +1,8 @@
 root = true
 
-[*.{ts,tsx,js,jsx}]
+[*.{ts,tsx,js,jsx,astro,md,mdx,json,yml,yaml,css,scss,html}]
 indent_style = space
-indent_size = 2
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-[*.astro]
-indent_style = space
-indent_size = 2
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-[*.{md,mdx}]
-indent_style = space
-indent_size = 2
+indent_size = 4
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
