@@ -1,19 +1,12 @@
 ---
 import BlogPost from '../components/blog/BlogPost.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { dateComparer } from '../utils/date-comparer';
+import type { PostFrontmatter } from './posts/types';
 
 const pageTitle = "My Astro Learning Blog";
 
-function dateComparer<T>(dateExtractor: (t: T) => Date) {
-    return (a: T, b: T) => Date.parse(dateExtractor(a).toString()) - Date.parse(dateExtractor(b).toString());
-}
-
-interface Frontmatter {
-    title: string;
-    pubDate: Date;
-}
-
-const allPosts = await Astro.glob<Frontmatter>('./posts/*.md');
+const allPosts = await Astro.glob<PostFrontmatter>('./posts/*.md');
 
 const sortedPosts = allPosts
     .sort(dateComparer((post => post.frontmatter.pubDate)))
