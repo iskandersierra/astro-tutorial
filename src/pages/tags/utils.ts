@@ -9,15 +9,22 @@ export function filterPostsByTag(posts: MarkdownInstance<PostFrontmatter>[], tag
         .reverse();
 }
 
-export function getOrganizedTags(posts: MarkdownInstance<PostFrontmatter>[]) {
+export function getOrganizedTags(posts: MarkdownInstance<PostFrontmatter>[], options?: { filteredBy?: string[] }) {
     const tags = posts.flatMap((post) => post.frontmatter.tags ?? []);
 
-    const uniqueTags = [...new Set(tags)];
+    let uniqueTags = [...new Set(tags)].sort();
+
+    if (options?.filteredBy) {
+        uniqueTags = uniqueTags.filter((tag) => options.filteredBy.includes(tag));
+    }
 
     return uniqueTags.map((tag) => {
+        const tagPosts = filterPostsByTag(posts, tag);
+
         return {
             tag,
-            posts: filterPostsByTag(posts, tag),
+            posts: tagPosts,
+            postCount: tagPosts.length,
         };
     });
 }
