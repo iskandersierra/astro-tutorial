@@ -1,7 +1,5 @@
 ---
-import Footer from '../components/layout/Footer.astro';
-import Header from '../components/layout/Header.astro';
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const pageTitle = "About Me";
 
@@ -23,55 +21,40 @@ const fontWeight = "bold";
 const textCase = "uppercase";
 ---
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <title>{pageTitle}</title>
-        <style define:vars={{skillColor, fontWeight, textCase}}>
-        h1 {
-            color: purple;
-            font-size: 4rem;
-        }
-        .skill {
-            color: var(--skillColor);
-            font-weight: var(--fontWeight);
-            text-transform: var(--textCase);
-        }
-        </style>
-    </head>
-    <body>
-        <Header />
+<BaseLayout pageTitle={pageTitle}>
+    <h2>... and my new Astro site!</h2>
 
-        <h1>{pageTitle}</h1>
-        <h2>... and my new Astro site!</h2>
+    <p>I am working through Astro's introductory tutorial. This is the second page on my website, and it's the first one I built myself!</p>
 
-        <p>I am working through Astro's introductory tutorial. This is the second page on my website, and it's the first one I built myself!</p>
+    <p>This site will update as I complete more of the tutorial, so keep checking back and see how my journey is going!</p>
 
-        <p>This site will update as I complete more of the tutorial, so keep checking back and see how my journey is going!</p>
-
-        <h3>Some things about me:</h3>
-        <ul>
+    <h3>Some things about me:</h3>
+    <ul>
         <li class="fact">My name is {identity.firstName}.</li>
         <li class="fact">I live in {identity.country} and I work as a {identity.occupation}.</li>
         {identity.hobbies.length > 1 && (
             <li class="fact">Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}</li>
         )}
-        </ul>
+    </ul>
 
-        <h3>My skills are:</h3>
-        <ul>
+    <h3>My skills are:</h3>
+    <ul>
         {skills.map((skill) => (
             <li class="skill">{skill}</li>
         ))}
-        </ul>
+    </ul>
 
-        {happy && <p>I am happy to be learning Astro!</p>}
+    {happy && <p>I am happy to be learning Astro!</p>}
 
-        {finished && <p>I finished this tutorial!</p>}
+    {finished && <p>I finished this tutorial!</p>}
 
-        {goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
+    {goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
+</BaseLayout>
 
-        <Footer />
-    </body>
-</html>
+<style define:vars={{skillColor, fontWeight, textCase}}>
+    .skill {
+        color: var(--skillColor);
+        font-weight: var(--fontWeight);
+        text-transform: var(--textCase);
+    }
+</style>
