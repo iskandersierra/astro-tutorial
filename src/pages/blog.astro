@@ -1,15 +1,15 @@
 ---
+import { getCollection } from "astro:content";
 import BlogPost from '../components/blog/BlogPost.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { dateComparer } from '../utils/date-comparer';
-import type { PostFrontmatter } from '../utils/post-types';
 
 const pageTitle = "My Astro Learning Blog";
 
-const allPosts = await Astro.glob<PostFrontmatter>('./posts/*.md');
+const postCollection = await getCollection("posts");
 
-const sortedPosts = allPosts
-    .sort(dateComparer((post => post.frontmatter.pubDate)))
+const sortedPosts = postCollection
+    .sort(dateComparer((post => post.data.pubDate)))
     .reverse();
 ---
 
@@ -18,7 +18,7 @@ const sortedPosts = allPosts
     <ul>
         {sortedPosts.map((post) => (
             <li>
-                <BlogPost title={post.frontmatter.title} url={post.url} />
+                <BlogPost title={post.data.title} slug={post.slug} />
             </li>
         ))}
     </ul>

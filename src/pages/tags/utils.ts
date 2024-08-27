@@ -1,30 +1,44 @@
-import type { MarkdownInstance } from "astro";
-import type { PostFrontmatter } from "../../utils/post-types";
+import { getCollection } from "astro:content";
 import { dateComparer } from "../../utils/date-comparer";
 
-export function filterPostsByTag(posts: MarkdownInstance<PostFrontmatter>[], tag: string) {
-    return posts
-        .filter((post) => post.frontmatter.tags?.includes(tag))
-        .sort(dateComparer((post => post.frontmatter.pubDate)))
+export async function getPostList(options?: { filteredByTags?: string[] }) {
+    const filteredByTags = options?.filteredByTags ?? [];
+
+    const allPosts = await getCollection("posts", (post) => {
+        if (filteredByTags.length > 0) {
+            return post.data.tags.some((tag) => filteredByTags.includes(tag));
+        }
+        return true;
+    });
+
+    return allPosts
+        .sort(dateComparer((post) => post.data.pubDate))
         .reverse();
 }
 
-export function getOrganizedTags(posts: MarkdownInstance<PostFrontmatter>[], options?: { filteredBy?: string[] }) {
-    const tags = posts.flatMap((post) => post.frontmatter.tags ?? []);
+export async function getTagList(options?: { filteredByTags?: string[] }) {
+    const filteredByTags = options?.filteredByTags ?? [];
 
-    let uniqueTags = [...new Set(tags)].sort();
+    const allPosts = await getPostList(options);
 
-    if (options?.filteredBy) {
-        uniqueTags = uniqueTags.filter((tag) => options.filteredBy.includes(tag));
+    let uniqueTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].sort();
+
+    if (filteredByTags.length > 0) {
+        uniqueTags = uniqueTags.filter((tag) => filteredByTags.includes(tag));
     }
 
     return uniqueTags.map((tag) => {
-        const tagPosts = filterPostsByTag(posts, tag);
+        const posts = allPosts
+            .filter((post) => post.data.tags.includes(tag))
+            .sort(dateComparer((post) => post.data.pubDate))
+            .reverse();
+
+        const postCount = posts.length;
 
         return {
             tag,
-            posts: tagPosts,
-            postCount: tagPosts.length,
+            posts,
+            postCount,
         };
     });
 }

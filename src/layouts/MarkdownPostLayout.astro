@@ -1,26 +1,20 @@
 ---
-import type { MarkdownInstance } from 'astro';
 import BaseLayout from './BaseLayout.astro';
-import type { PostFrontmatter } from '../utils/post-types';
-import { getOrganizedTags } from '../pages/tags/utils';
 import TagList from '../components/blog/TagList.astro';
-const { frontmatter } = Astro.props;
+const { data } = Astro.props;
 
-const allPosts: MarkdownInstance<PostFrontmatter>[] = await Astro.glob<PostFrontmatter>('../pages/posts/*.md');
-
-const tags = getOrganizedTags(allPosts, { filteredBy: frontmatter.tags });
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
-    <TagList tags={tags} />
+<BaseLayout pageTitle={data.title}>
+    <TagList tags={data.tags} />
 
-    <p>{frontmatter.pubDate.toString().slice(0,10)}</p>
+    <p>{data.pubDate.toString().slice(0,10)}</p>
 
-    <p><em>{frontmatter.description}</em></p>
+    <p><em>{data.description}</em></p>
 
-    <p>Written by: {frontmatter.author}</p>
+    <p>Written by: {data.author}</p>
 
-    <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+    <img src={data.image.url} width="300" alt={data.image.alt} />
 
     <slot />
 </BaseLayout>

@@ -1,21 +1,17 @@
 ---
-import type { MarkdownInstance } from 'astro';
 import BlogPost from '../../components/blog/BlogPost.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import type { PostFrontmatter } from '../../utils/post-types';
-import { getOrganizedTags } from './utils';
+import { getTagList } from "./utils";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-    const allPosts: MarkdownInstance<PostFrontmatter>[] = await Astro.glob<PostFrontmatter>('../posts/*.md');
+    const tagList = await getTagList();
 
-    const tags = getOrganizedTags(allPosts);
-
-    return tags.map((tag) => {
+    return tagList.map((tagData) => {
         return ({
-            params: { tag: tag.tag },
-            props: { posts: tag.posts },
+            params: { tag: tagData.tag },
+            props: { posts: tagData.posts },
         });
     });
 }
@@ -23,16 +19,15 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 
-const filteredPosts = posts.filter((post) => post.frontmatter.tags?.includes(tag));
 ---
 
 <BaseLayout pageTitle={tag}>
     <p>Posts tagged with {tag}</p>
 
     <ul>
-        {filteredPosts.map((post) => (
+        {posts.map((post) => (
             <li>
-                <BlogPost title={post.frontmatter.title} url={post.url} />
+                <BlogPost title={post.data.title} slug={post.slug} />
             </li>
         ))}
     </ul>

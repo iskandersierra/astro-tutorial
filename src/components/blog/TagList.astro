@@ -1,42 +1,11 @@
 ---
+import TagListView from "./TagListView.astro";
+import { getTagList } from "../../pages/tags/utils";
 
-interface PostTag {
-    tag: string;
-    postCount?: number;
-}
-
-const tags: PostTag[] = Astro.props.tags;
-
+const { tags } = Astro.props as { tags?: string[] };
+const tagList = await getTagList({
+    filteredByTags: tags,
+});
 ---
 
-<ul>
-    {tags.map((tag) => (
-        <li>
-            <a href={`/tags/${tag.tag}`}>{tag.tag}</a>
-            {typeof tag.postCount === 'number' && (<span>[{tag.postCount}]</span>)}
-        </li>
-    ))}
-</ul>
-
-<style>
-    a {
-        color: #00539F;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    li {
-        margin-bottom: 0.5rem;
-        margin: 0.25em;
-        border: dotted 1px #a1a1a1;
-        border-radius: .5em;
-        padding: .5em 1em;
-        font-size: 1.15em;
-        background-color: #F8FCFD;
-    }
-</style>
+<TagListView tags={tagList} />
