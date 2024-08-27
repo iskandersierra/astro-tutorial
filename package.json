@@ -14,7 +14,7 @@
     "@astrojs/netlify": "^5.5.1",
     "@astrojs/preact": "^3.5.1",
     "@astrojs/rss": "^4.0.7",
-    "astro": "^4.14.4",
+    "astro": "^4.14.5",
     "preact": "^10.23.2",
     "typescript": "^5.5.4"
   }
