@@ -1,7 +1,7 @@
 ---
 import type { MarkdownInstance } from 'astro';
 import BaseLayout from './BaseLayout.astro';
-import type { PostFrontmatter } from '../pages/posts/types';
+import type { PostFrontmatter } from '../utils/post-types';
 import { getOrganizedTags } from '../pages/tags/utils';
 import TagList from '../components/blog/TagList.astro';
 const { frontmatter } = Astro.props;

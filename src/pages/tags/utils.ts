@@ -1,5 +1,5 @@
 import type { MarkdownInstance } from "astro";
-import type { PostFrontmatter } from "../posts/types";
+import type { PostFrontmatter } from "../../utils/post-types";
 import { dateComparer } from "../../utils/date-comparer";
 
 export function filterPostsByTag(posts: MarkdownInstance<PostFrontmatter>[], tag: string) {
